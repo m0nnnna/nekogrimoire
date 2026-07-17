@@ -1,0 +1,14 @@
+{
+  "name": "nekogrimoire",
+  "version": "1.0.0",
+  "description": "NekoGrimoire — a community spellbook of AI art prompts.",
+  "private": true,
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "eleventy",
+    "debug": "DEBUG=Eleventy* eleventy"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}

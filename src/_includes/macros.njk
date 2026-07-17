@@ -1,0 +1,24 @@
+{% macro card(prompt) %}
+<a class="card-link" href="{{ ('/prompt/' + prompt.slug + '/') | url }}">
+  <div class="card">
+    <div class="card-media">
+      {% if prompt.images and prompt.images.length > 0 %}
+        <img src="{{ prompt.images[0] | url }}" alt="{{ prompt.title }}" loading="lazy" />
+      {% else %}
+        <span class="placeholder">🐾</span>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      <div class="card-title">{{ prompt.title }}</div>
+      {% if prompt.credit %}
+        <div class="card-credit">by {{ prompt.credit.name }}</div>
+      {% endif %}
+      {% if prompt.tags and prompt.tags.length > 0 %}
+        <div class="tags">
+          {% for tag in prompt.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</a>
+{% endmacro %}

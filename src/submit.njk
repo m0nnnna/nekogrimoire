@@ -1,0 +1,87 @@
+---
+layout: base.njk
+title: Submit a Prompt
+description: Add your prompt to the NekoGrimoire gallery.
+---
+<div class="prose">
+  <h1 class="detail-title" style="margin-top:36px;">Submit a Prompt</h1>
+  <p>
+    Every entry in the grimoire lives as one JSON file in
+    <code>/prompts/</code>, plus optional images in <code>/images/</code>.
+    You don't need <code>git</code> or the command line — fill out the form
+    below and it builds the file + a ready-to-open GitHub link for you.
+    You'll need a (free) GitHub account to open the pull request.
+  </p>
+
+  <div class="callout">
+    Prefer to do it by hand, or the auto-generated link is too long to open?
+    Copy the JSON at the bottom of this form and paste it into a new file at
+    <code>prompts/&lt;your-slug&gt;.json</code> using GitHub's
+    <a href="https://github.com/{{ site.repo }}/new/{{ site.defaultBranch }}" target="_blank" rel="noopener">“create new file”</a>
+    page, following the same schema as
+    <a href="https://github.com/{{ site.repo }}/blob/{{ site.defaultBranch }}/prompts/example-neon-alley-cat.json" target="_blank" rel="noopener">this example</a>.
+  </div>
+</div>
+
+<div class="form-card">
+  <div class="field">
+    <label for="f-title">Title *</label>
+    <input type="text" id="f-title" placeholder="Neon Alley Cat" />
+  </div>
+
+  <div class="field">
+    <label for="f-credit-name">Your name / handle</label>
+    <input type="text" id="f-credit-name" placeholder="floofywolf" />
+  </div>
+
+  <div class="field">
+    <label for="f-credit-url">Link (X/Twitter, portfolio, etc.)</label>
+    <input type="url" id="f-credit-url" placeholder="https://x.com/floofywolf" />
+  </div>
+
+  <div class="field">
+    <label for="f-tags">Tags</label>
+    <input type="text" id="f-tags" placeholder="cyberpunk, cat, portrait" />
+    <span class="hint">Comma-separated.</span>
+  </div>
+
+  <div class="field">
+    <label>Step 1 (optional) — image(s)</label>
+    <span class="hint">
+      Upload your result image(s) to GitHub first, then list the exact filename(s) you used below, one per line.
+      This opens as its own small pull request, separate from the one step 2 creates below — that's fine, a
+      maintainer can merge both together.
+    </span>
+    <div class="btn-row">
+      <button type="button" class="btn secondary" id="upload-link-btn">Open GitHub image upload →</button>
+    </div>
+    <textarea id="f-images" rows="2" placeholder="neon-alley-cat-1.jpg"></textarea>
+  </div>
+
+  <div class="field">
+    <label>Step 2 — prompt version(s) *</label>
+    <span class="hint">Add one entry per AI model or per variation of the prompt.</span>
+    <div id="versions"></div>
+    <div class="btn-row">
+      <button type="button" class="btn secondary" id="add-version-btn">+ Add another version</button>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button type="button" class="btn" id="generate-btn">Generate &amp; open pull request →</button>
+    <button type="button" class="btn secondary" id="copy-json-btn">Copy JSON instead</button>
+  </div>
+
+  <div class="field" style="margin-top:18px;">
+    <label>Preview</label>
+    <textarea id="f-preview" rows="10" readonly></textarea>
+  </div>
+</div>
+
+<script>
+  window.NEKOGRIMOIRE_CONFIG = {
+    repo: {{ site.repo | jsonStringify | safe }},
+    branch: {{ site.defaultBranch | jsonStringify | safe }}
+  };
+</script>
+<script src="{{ '/assets/js/submit.js' | url }}"></script>

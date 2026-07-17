@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ title or site.title }}{% if title %} · {{ site.title }}{% endif %}</title>
+  <meta name="description" content="{{ description or site.description }}" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | url }}" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div>
+        <a class="brand" href="{{ '/' | url }}"><span class="paw">🐾</span> {{ site.title }}</a>
+        <div class="tagline">{{ site.tagline }}</div>
+      </div>
+      <nav class="site-nav">
+        <a href="{{ '/' | url }}">Gallery</a>
+        <a href="{{ '/submit/' | url }}">Submit a Prompt</a>
+        <a href="https://github.com/{{ site.repo }}" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    {{ content | safe }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      Conjured by the community · <a href="https://github.com/{{ site.repo }}" target="_blank" rel="noopener">contribute on GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,75 @@
+---
+layout: base.njk
+pagination:
+  data: prompts
+  size: 1
+  alias: entry
+permalink: "/prompt/{{ entry.slug }}/"
+eleventyComputed:
+  title: "{{ entry.title }}"
+  description: "AI art prompt “{{ entry.title }}” with {{ entry.versions.length }} version(s)."
+---
+<p><a href="{{ '/' | url }}">&larr; back to gallery</a></p>
+
+<div class="detail-header">
+  <h1 class="detail-title">{{ entry.title }}</h1>
+  <div class="detail-meta">
+    {% if entry.credit %}
+      <span>by
+        {% if entry.credit.url %}
+          <a href="{{ entry.credit.url }}" target="_blank" rel="noopener">{{ entry.credit.name }}</a>
+        {% else %}
+          {{ entry.credit.name }}
+        {% endif %}
+      </span>
+    {% endif %}
+    {% if entry.dateAdded %}<span>{{ entry.dateAdded }}</span>{% endif %}
+  </div>
+  {% if entry.tags and entry.tags.length > 0 %}
+    <div class="tags" style="margin-top:10px;">
+      {% for tag in entry.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+<div class="detail-images">
+  {% if entry.images and entry.images.length > 0 %}
+    {% for img in entry.images %}
+      <img src="{{ img | url }}" alt="{{ entry.title }} — result {{ loop.index }}" loading="lazy" />
+    {% endfor %}
+  {% else %}
+    <div class="placeholder">🐾 no image yet</div>
+  {% endif %}
+</div>
+
+<div class="versions">
+  {% for version in entry.versions %}
+    <div class="version-card">
+      <div class="version-header">
+        <span class="version-label">{{ version.label or version.ai or "Version " + loop.index }}</span>
+        <button class="copy-btn" data-target="version-text-{{ loop.index0 }}" type="button">Copy</button>
+      </div>
+      <pre class="version-text" id="version-text-{{ loop.index0 }}">{{ version.text }}</pre>
+    </div>
+  {% else %}
+    <p class="empty-state">No prompt text was included for this entry.</p>
+  {% endfor %}
+</div>
+
+<script>
+  document.querySelectorAll(".copy-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var target = document.getElementById(btn.getAttribute("data-target"));
+      if (!target) return;
+      navigator.clipboard.writeText(target.textContent).then(function () {
+        var original = btn.textContent;
+        btn.textContent = "Copied!";
+        btn.classList.add("copied");
+        setTimeout(function () {
+          btn.textContent = original;
+          btn.classList.remove("copied");
+        }, 1500);
+      });
+    });
+  });
+</script>

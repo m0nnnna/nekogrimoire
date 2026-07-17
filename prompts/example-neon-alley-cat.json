@@ -1,0 +1,20 @@
+{
+  "title": "Neon Alley Cat",
+  "credit": {
+    "name": "floofywolf",
+    "url": "https://x.com/floofywolf"
+  },
+  "tags": ["cyberpunk", "cat", "neon", "portrait"],
+  "images": [],
+  "dateAdded": "2026-07-17",
+  "versions": [
+    {
+      "label": "Midjourney v6",
+      "text": "a scrawny neon-lit alley cat perched on a rain-slicked dumpster, cyberpunk back alley, magenta and cyan signage reflections, shallow depth of field, cinematic, ultra detailed fur, 35mm --ar 3:4 --v 6"
+    },
+    {
+      "label": "Stable Diffusion XL",
+      "text": "cyberpunk alley cat, neon magenta and cyan lighting, wet asphalt reflections, cinematic composition, highly detailed fur, night city background, bokeh\nNegative prompt: blurry, low detail, cartoon, oversaturated"
+    }
+  ]
+}
