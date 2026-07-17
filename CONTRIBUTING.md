@@ -24,8 +24,8 @@ There are two ways to add a prompt:
 {
   "title": "Neon Alley Cat",
   "credit": {
-    "name": "floofywolf",
-    "url": "https://x.com/floofywolf" // optional — X/Twitter, portfolio, etc.
+    "name": "your-name-or-handle",
+    "url": "https://x.com/your-handle" // optional — X/Twitter, portfolio, etc.
   },
   "tags": ["cyberpunk", "cat", "neon"],
   "images": ["/images/neon-alley-cat-1.jpg"], // optional, can be empty []
