@@ -121,6 +121,11 @@
     );
   });
 
+  // GitHub itself hard-rejects overly long request URLs ("Whoa there! Your
+  // request URL is too long") well below typical browser limits. Stay well
+  // under that wall and switch to a clipboard-copy fallback beyond it.
+  var MAX_URL_VALUE_LENGTH = 3000;
+
   generateBtn.addEventListener("click", function () {
     var data = buildData();
     if (!titleEl.value.trim()) {
@@ -135,20 +140,37 @@
     var slug = currentSlug();
     var filename = "prompts/" + slug + ".json";
     var content = JSON.stringify(data, null, 2);
-    var url =
+    var encodedValue = encodeURIComponent(content);
+
+    var baseUrl =
       "https://github.com/" + cfg.repo + "/new/" + encodeURIComponent(cfg.branch) +
       "?filename=" + encodeURIComponent(filename) +
-      "&value=" + encodeURIComponent(content) +
       "&message=" + encodeURIComponent("Add prompt: " + data.title);
 
-    if (url.length > 7500) {
-      alert(
-        "This prompt is long enough that the auto-generated link may not open correctly. " +
-          "Use “Copy JSON instead” and paste it manually into a new file on GitHub."
+    if (encodedValue.length > MAX_URL_VALUE_LENGTH) {
+      // Too long to pass through the URL: copy JSON to the clipboard instead
+      // and open a blank new-file page (still prefilled with the filename)
+      // for the user to paste into.
+      navigator.clipboard.writeText(content).then(
+        function () {
+          alert(
+            "This prompt is too long to auto-fill, so the JSON has been copied to your clipboard instead. " +
+              "A new GitHub file page is opening — just paste (Ctrl/Cmd+V) into the editor."
+          );
+          window.open(baseUrl, "_blank");
+        },
+        function () {
+          alert(
+            "This prompt is too long to auto-fill and your browser blocked the clipboard copy. " +
+              "Use “Copy JSON instead” below, then paste it manually into a new file on GitHub."
+          );
+          window.open(baseUrl, "_blank");
+        }
       );
+      return;
     }
 
-    window.open(url, "_blank");
+    window.open(baseUrl + "&value=" + encodedValue, "_blank");
   });
 
   copyJsonBtn.addEventListener("click", function () {
