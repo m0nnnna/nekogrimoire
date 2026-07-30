@@ -75,7 +75,11 @@ description: Add your prompt to the NekoGrimoire gallery.
 
   <div class="field" style="margin-top:18px;">
     <label>Preview</label>
-    <textarea id="f-preview" rows="10" readonly></textarea>
+    <span class="hint">
+      You can edit this JSON directly — your edits are preserved and used by both buttons above.
+      <button type="button" class="btn secondary" id="reset-preview-btn" style="margin-left:6px;">↺ Reset from form</button>
+    </span>
+    <textarea id="f-preview" rows="10"></textarea>
   </div>
 </div>
 

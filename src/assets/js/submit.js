@@ -13,6 +13,7 @@
   var generateBtn = document.getElementById("generate-btn");
   var copyJsonBtn = document.getElementById("copy-json-btn");
   var uploadLinkBtn = document.getElementById("upload-link-btn");
+  var resetPreviewBtn = document.getElementById("reset-preview-btn");
 
   function slugify(str) {
     return (str || "")
@@ -96,13 +97,39 @@
     return data;
   }
 
+  // Once the user edits the preview box directly, it becomes the source of
+  // truth — form-field changes stop overwriting it so manual edits survive.
+  var previewEditedManually = false;
+
   function updatePreview() {
+    if (previewEditedManually) return;
     previewEl.value = JSON.stringify(buildData(), null, 2);
   }
 
-  function currentSlug() {
-    return slugify(titleEl.value);
+  // Returns the parsed JSON currently in the preview box, or null (with an
+  // alert) if it isn't valid JSON. This is the single source of truth for
+  // both "Copy JSON" and "Generate" so manual edits are always respected.
+  function getPreviewData() {
+    try {
+      return JSON.parse(previewEl.value);
+    } catch (e) {
+      alert("The preview box doesn't contain valid JSON. Please fix it before continuing:\n\n" + e.message);
+      return null;
+    }
   }
+
+  function currentSlug(title) {
+    return slugify(title);
+  }
+
+  previewEl.addEventListener("input", function () {
+    previewEditedManually = true;
+  });
+
+  resetPreviewBtn.addEventListener("click", function () {
+    previewEditedManually = false;
+    updatePreview();
+  });
 
   titleEl.addEventListener("input", updatePreview);
   [creditNameEl, creditUrlEl, tagsEl, imagesEl].forEach(function (el) {
@@ -127,17 +154,19 @@
   var MAX_URL_VALUE_LENGTH = 3000;
 
   generateBtn.addEventListener("click", function () {
-    var data = buildData();
-    if (!titleEl.value.trim()) {
+    updatePreview();
+    var data = getPreviewData();
+    if (!data) return;
+    if (!data.title || !("" + data.title).trim()) {
       alert("Please add a title first.");
       return;
     }
-    if (data.versions.length === 0) {
+    if (!Array.isArray(data.versions) || data.versions.length === 0) {
       alert("Please add at least one prompt version with text.");
       return;
     }
 
-    var slug = currentSlug();
+    var slug = currentSlug(data.title);
     var filename = "prompts/" + slug + ".json";
     var content = JSON.stringify(data, null, 2);
     var encodedValue = encodeURIComponent(content);
@@ -175,6 +204,7 @@
 
   copyJsonBtn.addEventListener("click", function () {
     updatePreview();
+    if (!getPreviewData()) return;
     navigator.clipboard.writeText(previewEl.value).then(function () {
       var original = copyJsonBtn.textContent;
       copyJsonBtn.textContent = "Copied!";
